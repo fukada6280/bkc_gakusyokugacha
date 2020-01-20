@@ -67,24 +67,24 @@ public class Main {
         }
 
         // maxValue以下のものだけ出力(→完成している)
-        mealDataList.stream()
-                .filter(mealData -> mealData.getValue() <= maxValue)
-                .forEach(mealData -> mealData.dump());
+        // mealDataList.stream()
+        //         .filter(mealData -> mealData.getValue() <= maxValue)
+        //         .forEach(mealData -> mealData.dump());
 
-        // 場所が等しいものだけ出力(→完成している)
-        mealDataList.stream()
-                .filter(mealData -> mealData.getPlace().equals(priorityPlace))
-                .forEach(mealData -> mealData.dump());
+        // // 場所が等しいものだけ出力(→完成している)
+        // mealDataList.stream()
+        //         .filter(mealData -> mealData.getPlace().equals(priorityPlace))
+        //         .forEach(mealData -> mealData.dump());
 
-        // maxValue以下のものだけを抽出
-        List<MealData> filterList =
-                mealDataList.stream()
-                        .filter(mealData -> mealData.getValue() <= maxValue)
-                        .collect(Collectors.toList());
+        // // maxValue以下のものだけを抽出
+        // List<MealData> filterList =
+        //         mealDataList.stream()
+        //                 .filter(mealData -> mealData.getValue() <= maxValue)
+        //                 .collect(Collectors.toList());
 
-        filterList.stream()
-                .forEach(data -> data.dump());
-
+        // filterList.stream()
+        //         .forEach(data -> data.dump());
+        Knapsack.filterVal(mealDataList, 500);
 
         // 残ったものの情報を増大させる
 
@@ -95,7 +95,5 @@ public class Main {
         // 求めたリストを出力する
 
     }
-
-    // csvファイルを読み込む
 
 }
