@@ -15,10 +15,9 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         // 読み込むファイルの名前
-        String filename = "./src/mealData.csv";
+        String filename = "mealData.csv";
         File file = new File(filename);
         List<MealData> mealDataList = new ArrayList<>(); // メインのデータとなる
-
 
         try {
             FileInputStream fis = new FileInputStream(file);
@@ -97,5 +96,6 @@ public class Main {
 
     }
 
-    //
+    // csvファイルを読み込む
+
 }
