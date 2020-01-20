@@ -1,0 +1,3 @@
+column -s, -t data.csv | head
+でcsvを見やすい形で出力してくれる
+
