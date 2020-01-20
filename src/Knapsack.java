@@ -1,12 +1,15 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 class Knapsack {
 
-    public static void pickName( final List<String> names, final String startingLetter) {
-        final Optional<String> foundName =
-                names.stream()
-                        .filter(name -> name.startsWith(startingLetter))
-                        .findFirst();
-
-        System.out.println(String.format("A name starting with %s: %s",
-                startingLetter, foundName.orElse("No name found")));
+    public static List<MealData> filterVal(final List<MealData> mealDataList, final int maxValue) {
+        final List<MealData> filterList =
+                mealDataList.stream()
+                        .filter(mealData -> mealData.getValue() <= maxValue)
+                        .collect(Collectors.toList());
+        return filterList;
     }
+
 }
