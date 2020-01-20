@@ -4,38 +4,61 @@ import java.util.stream.Collectors;
 
 class Knapsack {
 
-    static int knapsack(int num, int maxValue, int[] cost, int[] weight){
-        int[][] dp = new int[num + 1][maxValue + 1];
-        for(int i = 1; i <= num; i++) {
-            for(int j = 1; j <= maxValue; j++) {
-                if(j - cost[i] >= 0) {
-                    dp[i][j] = Math.max(dp[i][j], dp[i - 1][j - cost[i]] + weight[i]);
+    static List<Integer> knapsack(int num, int Money, int[] cost, int[] weight){
+        int[][] dp = new int[num + 1][Money + 1];
+        int[][] prev_w = new int[num + 1][Money + 1];
+        List<Integer> res = new ArrayList<Integer>();
+
+        for (int i = 0; i < num; ++i) {
+            for (int j = 0; j <= Money; ++j) {
+    
+                // i 番目の品物を選ぶ場合
+                if (j >= cost[i]) {
+                    if (dp[i + 1][j] < dp[i][j - cost[i] ] + weight[i]) {
+                        dp[i + 1][j] = dp[i][j - cost[i] ] + weight[i];
+                        prev_w[i + 1][j] = j - cost[i];
+                    }
                 }
-                dp[i][j] = Math.max(dp[i][j], dp[i - 1][j]);
+    
+                // i 番目の品物を選ばない場合
+                if (dp[i + 1][j] < dp[i][j]) {
+                    dp[i + 1][j] = dp[i][j];
+                    prev_w[i + 1][j] = j;
+                }
             }
         }
-        return dp[num][maxValue];
+        // 復元
+        int cur_w = Money;
+        for (int i = num - 1; i >= 0; --i) {
+            // 選んでいた場合
+            if (prev_w[i + 1][cur_w] == cur_w - cost[i]) {
+                // System.out.println( i + " th item (cost = " + cost[i] + ", weight = " + weight[i] + ")");
+                res.add(i);
+            }
+
+            // 復元テーブルをたどる
+            cur_w = prev_w[i + 1][cur_w];
+        }
+        // 適切に選んだときの金額はdp[num][Money]
+        return res;
     }
 
-    public static List<MealData> filterVal(final List<MealData> mealDataList, final int maxValue) {
-        final List<MealData> filterList =
-                mealDataList.stream()
-                        .filter(mealData -> mealData.getValue() <= maxValue)
-                        .collect(Collectors.toList());
+    public static List<Integer> filterVal(final List<MealData> mealDataList, final int Money) {
         
-        int[] weight = new int[mealDataList.size() + 1];
-        int[] value = new int[mealDataList.size() + 1];
+        int[] weight = new int[mealDataList.size()];
+        int[] value = new int[mealDataList.size()];
 
-        int pos = 1;
+        int pos = 0;
         for (MealData data : mealDataList) {
             weight[pos] = 1;
             value[pos] = data.getValue();
             pos += 1;
         }
-        int res = knapsack(mealDataList.size(), maxValue, value, weight);
-        System.out.println(res);
-
-        return filterList;
+        List<Integer> res = knapsack(mealDataList.size(), Money, value, weight);
+        // for (Integer i : res) {
+        //     System.out.println(i);
+        // }
+        return res;
     }
 
 }
