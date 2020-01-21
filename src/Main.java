@@ -2,40 +2,31 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
-
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.stream.Collectors;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
         // csvファイルを読み込む
         List<MealData> mealDataList = loadCsv("mealData.csv");
 
-        // ここから絞り込みを始める
         // 適当に絞り込み要件を定義 (本当はユーザーに入力させたい)
         String priorityPlace = "リンク"; // リンク優先
         int maxValue = 100;
         int priorityColumn = 4; // カロリー優先
 
-
         // maxValue以下のものだけ出力テスト(→完成している)
-        mealDataList.stream()
-                .filter(mealData -> mealData.getValue() <= maxValue)
-                .forEach(mealData -> mealData.dump());
-
-        // 場所が等しいものだけ出力テスト(→完成している)
-        mealDataList.stream()
-                .filter(mealData -> mealData.getPlace().equals(priorityPlace))
-                .forEach(mealData -> mealData.dump());
+        List<MealData> RecommendList = new ArrayList<>();
+        RecommendList = Knapsack.filterVal(mealDataList, 500);
+        
 
 
-        // 計算量を減らすため、場所限定と価格以下のフィルタをかける
+        // 計算量を減らすため、先に場所限定と価格以下のフィルタをかける
         List<MealData> filterList =
                 mealDataList.stream()
                         .filter(mealData -> mealData.getPlace().equals(priorityPlace))
@@ -46,11 +37,23 @@ public class Main {
         filterList.stream().forEach(data -> data.dump());
 
         // 残ったものの情報を増大させる, まずは米なしメインに米を足してメインにする
+        // 米なしメインのみ抽出, 米のみ抽出
+        List<MealData> noRiceMainList =
+                filterList.stream()
+                        .filter(mealData -> mealData.getCategory().equals("米なしメイン"))
+                        .collect(Collectors.toList());
+
+        List<MealData> riceList =
+                filterList.stream()
+                        .filter(mealData -> mealData.getCategory().equals("米"))
+                        .collect(Collectors.toList());
+
+        // 米なしメイン+米=メイン を作成する
 
 
 
 
-        // 全通りのリストができたと仮定する(上でcomplateListを作るとすると２行目を変更！！)
+        // 全通りのリストができたと仮定する
 
         //answerList.sort
 
