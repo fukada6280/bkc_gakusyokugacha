@@ -17,47 +17,16 @@ public class Main {
 
         // 適当に絞り込み要件を定義 (本当はユーザーに入力させたい)
         String priorityPlace = "リンク"; // リンク優先
-        int maxValue = 100;
+        int maxValue = 500;
         int priorityColumn = 4; // カロリー優先
 
-        // maxValue以下のものだけ出力テスト(→完成している)
+        // maxValue以下のものだけ出力テスト(xryuseix test)
         List<MealData> RecommendList = new ArrayList<>();
         RecommendList = Knapsack.filterVal(mealDataList, 500);
-        
 
-
-        // 計算量を減らすため、先に場所限定と価格以下のフィルタをかける
-        List<MealData> filterList =
-                mealDataList.stream()
-                        .filter(mealData -> mealData.getPlace().equals(priorityPlace))
-                        .filter(mealData -> mealData.getValue() <= maxValue)
-                        .collect(Collectors.toList());
-
-        // 確認出力
-        filterList.stream().forEach(data -> data.dump());
-
-        // 残ったものの情報を増大させる, まずは米なしメインに米を足してメインにする
-        // 米なしメインのみ抽出, 米のみ抽出
-        List<MealData> noRiceMainList =
-                filterList.stream()
-                        .filter(mealData -> mealData.getCategory().equals("米なしメイン"))
-                        .collect(Collectors.toList());
-
-        List<MealData> riceList =
-                filterList.stream()
-                        .filter(mealData -> mealData.getCategory().equals("米"))
-                        .collect(Collectors.toList());
-
-        // 米なしメイン+米=メイン を作成する
-
-
-
-
-        // 全通りのリストができたと仮定する
-
-        //answerList.sort
-
-        // 求めたリストを出力する
+        // メイン+（必要に応じて米）+(必要に応じて小皿１つ)の組み合わせで条件に合うものを出力(Fukada test)
+        List<MealData> resultList = new ArrayList<>();
+        resultList = makeLunchSetList(mealDataList, priorityPlace, maxValue);
 
     }
 
@@ -97,6 +66,73 @@ public class Main {
             e.printStackTrace();
         }
         return mealDataList;
+    }
+
+    /**
+     * メイン+（必要に応じて米）+(必要に応じて小皿１つ)の組み合わせで条件に合うものを出力
+     * @param mealDataList 元となるデータリスト
+     * @param priorityPlace 優先する場所
+     * @param maxValue 制限したい価格
+     * @return 条件に見合うランチセットのリスト
+     */
+    public static List<MealData> makeLunchSetList(List<MealData> mealDataList, String priorityPlace, int maxValue) {
+        //
+        // 計算量を減らすため、先に場所限定と価格以下のフィルタをかける
+        List<MealData> filterList =
+                mealDataList.stream()
+                        .filter(mealData -> mealData.getPlace().equals(priorityPlace))
+                        .filter(mealData -> mealData.getValue() <= maxValue)
+                        .collect(Collectors.toList());
+
+        // 残ったものの情報を増大させる, まずは米なしメインに米を足してメインにする
+        // 米なしメインのみ抽出, 米のみ抽出, メインのみ抽出, 小皿のみ抽出
+        List<MealData> noRiceMainList =
+                filterList.stream()
+                        .filter(mealData -> mealData.getCategory().equals("米なしメイン"))
+                        .collect(Collectors.toList());
+
+        List<MealData> riceList =
+                filterList.stream()
+                        .filter(mealData -> mealData.getCategory().equals("米"))
+                        .collect(Collectors.toList());
+
+        List<MealData> mainList =
+                filterList.stream()
+                        .filter(mealData -> mealData.getCategory().equals("メイン"))
+                        .collect(Collectors.toList());
+
+        List<MealData> kozaraList =
+                filterList.stream()
+                        .filter(mealData -> mealData.getCategory().equals("小皿"))
+                        .collect(Collectors.toList());
+
+        // 米なしメイン+米=メイン を作成する
+        for (MealData noRiceMainData : noRiceMainList) {
+            for (MealData riceData : riceList) {
+                MealData mealData = noRiceMainData.combine(riceData); // 米なしメイン + 米 = メイン を作成
+                mainList.add(mealData);
+            }
+        }
+
+        // 小皿を追加する
+        List<MealData> allPatternList = new ArrayList<>();
+        for (MealData main : mainList) {
+            for (MealData kozara : kozaraList) {
+                MealData mealData = main.combine(kozara);
+                allPatternList.add(mealData);
+            }
+        }
+
+        List<MealData> resultList =
+                allPatternList.stream()
+                        .filter(mealData -> mealData.getValue() <= maxValue)
+                        .collect(Collectors.toList());
+
+        // 確認
+        System.out.println("------------結果を出力--------------");
+        resultList.stream().forEach(data -> data.dump());
+
+        return resultList;
     }
 
 }

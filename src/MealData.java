@@ -12,6 +12,8 @@ class MealData {
     private int calcium; // カルシウム量(mg)
     private int vegetable; // 野菜量
 
+
+
     // コンストラクタ Fieldへの格納を強制する
     MealData(String place,
              String name,
@@ -52,6 +54,29 @@ class MealData {
         System.out.println("野菜量：　　　" + getVegetable());
         System.out.println("-----------------------");
     }
+
+    /**
+     * 自身と引数データ同士の合計を算出, 名称は ”+” で表現
+     * @param md 引数データ
+     * @return 中身の合計をしたMealData型オブジェクト
+     */
+    public MealData combine(MealData md) {
+        MealData mealData = new MealData(
+                this.getPlace(),
+                this.getName() + " + " + md.getName(),
+                "メイン",
+                this.getValue() + md.getValue(),
+                this.getKcal() + md.getKcal(),
+                this.getProtein() + md.getProtein(),
+                this.getLipid() + md.getLipid(),
+                this.getCarbohydrate() + md.getCarbohydrate(),
+                this.getSalt() + md.getSalt(),
+                this.getCalcium() + md.getCalcium(),
+                this.getVegetable() + md.getVegetable()
+        );
+        return mealData;
+    }
+
 
 
     // setter
