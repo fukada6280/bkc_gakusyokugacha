@@ -22,8 +22,17 @@ public class Main {
         int priorityColumn = 4; // カロリー優先
 
         // maxValue以下のものだけ出力テスト(xryuseix test)
-        List<MealData> RecommendList = new ArrayList<>();
-        RecommendList = Knapsack.filterVal(mealDataList, 500);
+        // List<MealData> RecommendList = new ArrayList<>();
+        // RecommendList = Knapsack.filterVal(mealDataList, 500);
+
+        List<MealData> kozaraList =
+                mealDataList.stream()
+                        .filter(mealData -> mealData.getCategory().equals("小皿"))
+                        .collect(Collectors.toList());
+
+
+
+        //
 
         // メイン+（必要に応じて米）+(必要に応じて小皿１つ)の組み合わせで条件に合うものを出力(Fukada test)
         List<MealData> resultList = new ArrayList<>();
@@ -113,6 +122,20 @@ public class Main {
                 MealData mealData = noRiceMainData.combine(riceData); // 米なしメイン + 米 = メイン を作成
                 mainList.add(mealData);
             }
+        }
+
+
+        // ryuseiくんへ受け渡す
+        // 小鉢に充てるお金をもつリストを作成
+        List<Integer> moneyApplyInKozaraList =
+                mainList.stream()
+                        .map(mealData -> maxValue - mealData.getValue())
+                        .collect(Collectors.toList());
+
+        List<Integer> RecommendList = new ArrayList<>();
+
+        for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
+            RecommendList.add( Knapsack.filterVal(kozaraList, moneyApplyInKozara) );
         }
 
         // 小皿を追加する
