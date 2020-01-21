@@ -3,6 +3,7 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Optional;
@@ -123,16 +124,38 @@ public class Main {
             }
         }
 
+        // 価格でフィルタ, 価格を大きい順でソート
         List<MealData> resultList =
                 allPatternList.stream()
                         .filter(mealData -> mealData.getValue() <= maxValue)
                         .collect(Collectors.toList());
+
+        resultList = sortValue(resultList);
 
         // 確認
         System.out.println("------------結果を出力--------------");
         resultList.stream().forEach(data -> data.dump());
 
         return resultList;
+    }
+
+    /**
+     * 価格の大きい順にソートする
+     * @param mealDataList ソートさせたいリスト　
+     * @return 大きい順にソートされたリスト
+     */
+    public static List<MealData> sortValue(List<MealData> mealDataList) {
+        // 標準ソートで入れ替える
+        for (int j=0;j<10000;j++) {
+            for (int i = 0; i < mealDataList.size() - 1; i++) {
+                if (mealDataList.get(i).getValue() < mealDataList.get(i + 1).getValue()) {
+                    MealData tmp = mealDataList.get(i);
+                    mealDataList.set(i, mealDataList.get(i + 1));
+                    mealDataList.set(i + 1, tmp);
+                }
+            }
+        }
+        return mealDataList;
     }
 
 }

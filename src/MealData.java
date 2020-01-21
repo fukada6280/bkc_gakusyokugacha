@@ -78,7 +78,6 @@ class MealData {
     }
 
 
-
     // setter
     public void setPlace(String place) {
         this.place = place;
