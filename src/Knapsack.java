@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Collections;
 
 class Knapsack {
 
@@ -40,7 +41,7 @@ class Knapsack {
             if (prev[i + 1][currnt] == currnt - cost[i]) {
                 // これが選んだ品物
                 // System.out.println( i + " th item (cost = " + cost[i] + ", weight = " + weight[i] + ")");
-                res.add(i);
+                res.add(cost[i]);
             }
 
             // 復元テーブルをたどる
@@ -68,7 +69,8 @@ class Knapsack {
             pos += 1;
         }
         List<Integer> res = knapsack(mealDataList.size(), Money, cost, weight);
-        
+        Collections.sort(res);
+
         return res;
     }
 

@@ -202,7 +202,7 @@ public class Main {
 
     /**
      * 価格の大きい順にソートする
-     * @param mealDataList ソートさせたいリスト　
+     * @param mealDataList ソートさせたいリスト
      * @return 大きい順にソートされたリスト
      */
     public static List<MealData> sortValue(List<MealData> mealDataList) {
