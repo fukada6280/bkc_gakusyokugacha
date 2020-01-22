@@ -43,6 +43,12 @@ class Knapsack {
         return res;
     }
 
+    /**
+     * ナップサック問題を応用して、値段を超えない適切な小皿の組み合わせを求める
+     * @param mealDataList 小皿のリストデータ
+     * @param Money 小皿に使える最大価格
+     * @return 適切な組み合わせの小皿indexリスト
+     */
     public static List<Integer> filterVal(final List<MealData> mealDataList, final int Money) {
         
         int[] weight = new int[mealDataList.size()];

@@ -55,6 +55,24 @@ class MealData {
         System.out.println("-----------------------");
     }
 
+    @Override
+    public String toString() {
+        String str =
+                "場所：　　" + getPlace() + "\n" +
+                "名称：　　" + getName() + "\n" +
+                "区分：　　" + getCategory() + "\n" +
+                "価格：　　" + getValue() + "\n" +
+                "ｶﾛﾘｰ：　　" + getKcal() + "\n" +
+                "ﾀﾝﾊﾟｸ質： " + getProtein() + "\n" +
+                "脂質：　　" + getLipid() + "\n" +
+                "炭水化物：" + getCarbohydrate() + "\n" +
+                "食塩量：　" + getSalt() + "\n" +
+                "ｶﾙｼｳﾑ量： " + getCalcium() + "\n" +
+                "野菜量：　" + getVegetable() + "\n" +
+                "-----------------------------------------------";
+        return str;
+    }
+
     /**
      * 自身と引数データ同士の合計を算出, 名称は ”+” で表現
      * @param md 引数データ

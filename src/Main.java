@@ -3,12 +3,9 @@ import java.io.File;
 import java.io.InputStreamReader;
 import java.io.FileInputStream;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Optional;
-import java.util.function.Function;
-import java.util.function.Predicate;
 
 
 public class Main {
@@ -22,25 +19,31 @@ public class Main {
         int priorityColumn = 4; // カロリー優先
 
         // maxValue以下のものだけ出力テスト(xryuseix test)
-        // List<MealData> RecommendList = new ArrayList<>();
-        // RecommendList = Knapsack.filterVal(mealDataList, 500);
-
         List<MealData> kozaraList =
                 mealDataList.stream()
                         .filter(mealData -> mealData.getCategory().equals("小皿"))
                         .collect(Collectors.toList());
 
-
-
-        //
-
         // メイン+（必要に応じて米）+(必要に応じて小皿１つ)の組み合わせで条件に合うものを出力(Fukada test)
         List<MealData> resultList = new ArrayList<>();
         resultList = makeLunchSetList(mealDataList, priorityPlace, maxValue);
 
+        // お試し実行 価格を昇順に並べる
+        mealDataList.stream()
+                .sorted(Comparator.comparingInt(MealData::getValue))
+                .forEach(System.out::println);
+
+        // お試し実行 価格を降順に並べる
+        mealDataList.stream()
+                .sorted(Comparator.comparingInt(MealData::getValue).reversed())
+                .forEach(System.out::println);
     }
 
-    // csvファイルを読み込む
+    /**
+     * csvファイルを読み込む
+     * @param filename 開きたいcsvファイルの名前
+     * @return MealData型のリスト
+      */
     public static List<MealData> loadCsv(String filename) {
         File file = new File(filename);
         List<MealData> mealDataList = new ArrayList<>(); // メインのデータとなる
@@ -132,11 +135,18 @@ public class Main {
                         .map(mealData -> maxValue - mealData.getValue())
                         .collect(Collectors.toList());
 
-        List<Integer> RecommendList = new ArrayList<>();
+        List<List<Integer>> RecommendList = new ArrayList<>();
 
         for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
-            RecommendList.add( Knapsack.filterVal(kozaraList, moneyApplyInKozara) );
+            List<Integer> tmp = new ArrayList<>();
+            tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
+            RecommendList.add(tmp);
         }
+
+        //
+        RecommendList.stream()
+                .forEach(System.out::println);;
+
 
         // 小皿を追加する
         List<MealData> allPatternList = new ArrayList<>();
@@ -156,8 +166,8 @@ public class Main {
         resultList = sortValue(resultList);
 
         // 確認
-        System.out.println("------------結果を出力--------------");
-        resultList.stream().forEach(data -> data.dump());
+        //System.out.println("------------結果を出力--------------");
+        //resultList.stream().forEach(data -> data.dump());
 
         return resultList;
     }
