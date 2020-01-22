@@ -24,9 +24,35 @@ public class Main {
                         .filter(mealData -> mealData.getCategory().equals("小皿"))
                         .collect(Collectors.toList());
 
-        // メイン+（必要に応じて米）+(必要に応じて小皿１つ)の組み合わせで条件に合うものを出力(Fukada test)
-        List<MealData> resultList = new ArrayList<>();
-        resultList = makeLunchSetList(mealDataList, priorityPlace, maxValue);
+
+        // ryuseiくんへ受け渡す
+        // 指定された場所の学食の価格リスト, 重複は削除
+        List<Integer> valueList =
+                mealDataList.stream()
+                        .filter(mealData -> mealData.getPlace().equals(priorityPlace))
+                        .map(mealData -> mealData.getValue())
+                        .distinct()
+                        .collect(Collectors.toList());
+
+
+        // 小鉢に充てるお金をもつリストを作成
+        List<Integer> moneyApplyInKozaraList =
+                mealDataList.stream()
+                        .filter(mealData -> mealData.getPlace().equals(priorityPlace))
+                        .map(mealData -> maxValue - mealData.getValue())
+                        .collect(Collectors.toList());
+
+        List<List<Integer>> RecommendList = new ArrayList<>();
+        for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
+            List<Integer> tmp = new ArrayList<>();
+            tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
+            RecommendList.add(tmp);
+        }
+
+        //
+        RecommendList.stream()
+                .forEach(System.out::println);
+
 
         // お試し実行 価格を昇順に並べる
         mealDataList.stream()
@@ -81,13 +107,14 @@ public class Main {
         return mealDataList;
     }
 
-    /**
+
+    /*
      * メイン+（必要に応じて米）+(必要に応じて小皿１つ)の組み合わせで条件に合うものを出力
      * @param mealDataList 元となるデータリスト
      * @param priorityPlace 優先する場所
      * @param maxValue 制限したい価格
      * @return 条件に見合うランチセットのリスト
-     */
+
     public static List<MealData> makeLunchSetList(List<MealData> mealDataList, String priorityPlace, int maxValue) {
         //
         // 計算量を減らすため、先に場所限定と価格以下のフィルタをかける
@@ -145,7 +172,7 @@ public class Main {
 
         //
         RecommendList.stream()
-                .forEach(System.out::println);;
+                .forEach(System.out::println);
 
 
         // 小皿を追加する
@@ -171,6 +198,7 @@ public class Main {
 
         return resultList;
     }
+    */
 
     /**
      * 価格の大きい順にソートする
