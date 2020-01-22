@@ -75,6 +75,7 @@ public class Main {
         } catch (Exception e) {
             e.printStackTrace();
         }
+<<<<<<< HEAD
         return mealDataList;
     }
 
@@ -105,6 +106,38 @@ public class Main {
                 filterList.stream()
                         .filter(mealData -> mealData.getCategory().equals("米"))
                         .collect(Collectors.toList());
+=======
+        // ここから絞り込みを始める
+        // 適当に絞り込み要件を定義
+        String priorityPlace = "リンク"; // リンク優先
+        int maxValue = 100;
+        int priorityColumn = 4; // カロリー優先
+
+        // 計算量を減らすため、場所限定と価格以下のフィルタをかける
+        for (MealData mealData : mealDataList) {
+            //
+        }
+
+        // maxValue以下のものだけ出力(→完成している)
+        // mealDataList.stream()
+        //         .filter(mealData -> mealData.getValue() <= maxValue)
+        //         .forEach(mealData -> mealData.dump());
+
+        // // 場所が等しいものだけ出力(→完成している)
+        // mealDataList.stream()
+        //         .filter(mealData -> mealData.getPlace().equals(priorityPlace))
+        //         .forEach(mealData -> mealData.dump());
+
+        // // maxValue以下のものだけを抽出
+        // List<MealData> filterList =
+        //         mealDataList.stream()
+        //                 .filter(mealData -> mealData.getValue() <= maxValue)
+        //                 .collect(Collectors.toList());
+
+        // filterList.stream()
+        //         .forEach(data -> data.dump());
+        Knapsack.filterVal(mealDataList, 500);
+>>>>>>> knapsack
 
         List<MealData> mainList =
                 filterList.stream()
@@ -162,6 +195,7 @@ public class Main {
         return resultList;
     }
 
+<<<<<<< HEAD
     /**
      * 価格の大きい順にソートする
      * @param mealDataList ソートさせたいリスト　
@@ -181,4 +215,6 @@ public class Main {
         return mealDataList;
     }
 
+=======
+>>>>>>> knapsack
 }
