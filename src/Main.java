@@ -46,15 +46,17 @@ public class Main {
                 .forEach(System.out::println);
 
 
-        // お試し実行 価格を昇順に並べる
-        mealDataList.stream()
+        /* お試し実行 価格を昇順に並べる
+        /mealDataList.stream()
                 .sorted(Comparator.comparingInt(MealData::getValue))
                 .forEach(System.out::println);
+         */
 
-        // お試し実行 価格を降順に並べる
+        /* お試し実行 価格を降順に並べる
         mealDataList.stream()
                 .sorted(Comparator.comparingInt(MealData::getValue).reversed())
                 .forEach(System.out::println);
+         */
     }
 
     /**
@@ -191,6 +193,4 @@ public class Main {
         return resultList;
     }
     */
-
-
 }
