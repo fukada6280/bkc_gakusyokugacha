@@ -18,22 +18,14 @@ public class Main {
         int maxValue = 500;
         int priorityColumn = 4; // カロリー優先
 
-        // maxValue以下のものだけ出力テスト(xryuseix test)
-        List<MealData> kozaraList =
-                mealDataList.stream()
-                        .filter(mealData -> mealData.getCategory().equals("小皿"))
-                        .collect(Collectors.toList());
 
-
-        // ryuseiくんへ受け渡す
-        // 指定された場所の学食の価格リスト, 重複は削除
+        // 指定された場所の学食の価格リスト, 重複は削除 (ryuseiくんへ受け渡す)
         List<Integer> valueList =
                 mealDataList.stream()
                         .filter(mealData -> mealData.getPlace().equals(priorityPlace))
                         .map(mealData -> mealData.getValue())
                         .distinct()
                         .collect(Collectors.toList());
-
 
         // 小鉢に充てるお金をもつリストを作成
         List<Integer> moneyApplyInKozaraList =
@@ -45,11 +37,11 @@ public class Main {
         List<List<Integer>> RecommendList = new ArrayList<>();
         for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
             List<Integer> tmp = new ArrayList<>();
-            tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
+            tmp = Knapsack.filterVal(valueList, moneyApplyInKozara);
             RecommendList.add(tmp);
         }
 
-        //
+        // 正しいか確認
         RecommendList.stream()
                 .forEach(System.out::println);
 
@@ -200,23 +192,5 @@ public class Main {
     }
     */
 
-    /**
-     * 価格の大きい順にソートする
-     * @param mealDataList ソートさせたいリスト
-     * @return 大きい順にソートされたリスト
-     */
-    public static List<MealData> sortValue(List<MealData> mealDataList) {
-        // 標準ソートで入れ替える
-        for (int j=0;j<10000;j++) {
-            for (int i = 0; i < mealDataList.size() - 1; i++) {
-                if (mealDataList.get(i).getValue() < mealDataList.get(i + 1).getValue()) {
-                    MealData tmp = mealDataList.get(i);
-                    mealDataList.set(i, mealDataList.get(i + 1));
-                    mealDataList.set(i + 1, tmp);
-                }
-            }
-        }
-        return mealDataList;
-    }
 
 }

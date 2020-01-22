@@ -40,7 +40,7 @@ class MealData {
     }
 
     // METHOD
-    public void dump() {
+    /*public void dump() {
         System.out.println("場所：　　　　" + getPlace());
         System.out.println("名称：　　　　" + getName());
         System.out.println("区分：　　　　" + getCategory());
@@ -53,7 +53,7 @@ class MealData {
         System.out.println("カルシウム量：" + getCalcium());
         System.out.println("野菜量：　　　" + getVegetable());
         System.out.println("-----------------------");
-    }
+    }*/
 
     @Override
     public String toString() {
