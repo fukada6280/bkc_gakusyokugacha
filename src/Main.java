@@ -19,6 +19,7 @@ public class Main {
         int priorityColumn = 4; // カロリー優先
 
 
+        // ryuseiくんに受け渡す引数を作成
         // 小皿リストを作成 (ryuseiくんへ受け渡す)
         List<MealData> kozaraList =
                 mealDataList.stream()
@@ -33,6 +34,7 @@ public class Main {
                         .map(mealData -> maxValue - mealData.getValue())
                         .collect(Collectors.toList());
 
+        // 米+(メインリストの組み合わせ)
         List<List<Integer>> RecommendList = new ArrayList<>();
         for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
             List<Integer> tmp = new ArrayList<>();
@@ -44,6 +46,7 @@ public class Main {
         RecommendList.stream()
                 .forEach(System.out::println);
 
+        // 
 
         /* お試し実行 価格を昇順に並べる
         /mealDataList.stream()

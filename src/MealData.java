@@ -40,20 +40,6 @@ class MealData {
     }
 
     // METHOD
-    /*public void dump() {
-        System.out.println("場所：　　　　" + getPlace());
-        System.out.println("名称：　　　　" + getName());
-        System.out.println("区分：　　　　" + getCategory());
-        System.out.println("価格：　　　　" + getValue());
-        System.out.println("カロリー：　　" + getKcal());
-        System.out.println("タンパク質：　" + getProtein());
-        System.out.println("脂質：　　　　" + getLipid());
-        System.out.println("炭水化物：　　" + getCarbohydrate());
-        System.out.println("食塩量：　　　" + getSalt());
-        System.out.println("カルシウム量：" + getCalcium());
-        System.out.println("野菜量：　　　" + getVegetable());
-        System.out.println("-----------------------");
-    }*/
 
     @Override
     public String toString() {
@@ -150,6 +136,7 @@ class MealData {
     public String getName() {
         return this.name;
     }
+
     public String getCategory() {
         return this.category;
     }
