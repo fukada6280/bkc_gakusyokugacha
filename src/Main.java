@@ -19,12 +19,11 @@ public class Main {
         int priorityColumn = 4; // カロリー優先
 
 
-        // 指定された場所の学食の価格リスト, 重複は削除 (ryuseiくんへ受け渡す)
-        List<Integer> valueList =
+        // 小皿リストを作成 (ryuseiくんへ受け渡す)
+        List<MealData> kozaraList =
                 mealDataList.stream()
                         .filter(mealData -> mealData.getPlace().equals(priorityPlace))
-                        .map(mealData -> mealData.getValue())
-                        .distinct()
+                        .filter(mealData -> mealData.getCategory().equals("小皿"))
                         .collect(Collectors.toList());
 
         // 小鉢に充てるお金をもつリストを作成
@@ -37,7 +36,7 @@ public class Main {
         List<List<Integer>> RecommendList = new ArrayList<>();
         for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
             List<Integer> tmp = new ArrayList<>();
-            tmp = Knapsack.filterVal(valueList, moneyApplyInKozara);
+            tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
             RecommendList.add(tmp);
         }
 
