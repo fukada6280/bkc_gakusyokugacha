@@ -1,6 +1,8 @@
+# -*- coding:utf-8 -*-
 require 'fileutils'
 require 'open-uri'
 require 'husc'
+require './src/mdap'
 
 def webDL(link, file)
   ## -----*----- Webからダウンロード -----*----- ##
@@ -17,24 +19,33 @@ def webDL(link, file)
   end
 end
 
+if __FILE__ == $0
+  url = 'https://www.u-coop.net/food/menu/hanshin/info.php'
+  agent = Husc.new(url)
 
-url = 'https://www.u-coop.net/food/menu/hanshin/info.php'
-agent = Husc.new(url)
+  # fetch all categories
+  categories = agent.css('#nav').css('li').map do |el|
+    url + el.css('a').attr('href')
+  end
 
-# fetch all categories
-categories = agent.css('#nav').css('li').map do |el|
-  url + el.css('a').attr('href')
+  # fetch image links and names
+  images = []
+  categories.each do |category|
+    doc = Husc.new(category)
+    doc.css('img').each { |el|
+      unless el.attr('alt') == ""
+        images <<  {
+          name: el.attr('alt'),
+          link: 'https://www.u-coop.net/food/menu/' + el.attr('src').gsub('../', '')
+        }
+      end
+    }
+  end
+
+  # download image files
+  mdap(images.length) do |i|
+    link = images[i][:link]
+    path = 'img/' + images[i][:name] + '.png'
+    webDL(link, path)
+  end
 end
-
-# fetch image links and names
-images = []
-categories.each do |category|
-  doc = Husc.new(category)
-  doc.css('img').each { |el|
-    unless el.attr('alt') == ""
-      images <<  {name: el.attr('alt'), link: el.attr('src')}
-    end
-  }
-end
-
-p images
