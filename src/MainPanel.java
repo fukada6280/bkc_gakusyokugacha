@@ -14,6 +14,7 @@ public class MainPanel extends JPanel implements ChangeListener {
   MainFrame mf;
   String str;
 
+  // GUI部品
   JLabel titleLabel;
   JLabel placeLabel;
   String[] placeList = { "指定しない", "リンク", "ユニオン１階", "ユニオン２階" };
@@ -139,7 +140,7 @@ public class MainPanel extends JPanel implements ChangeListener {
     // startCombo.addActionListener(this);
 
     // 結果表示画面に移るボタンの作成
-    toSubBtn = new JButton("SubPanelに移動=この条件で検索する");
+    toSubBtn = new JButton("この条件で検索する");
     toSubBtn.setBounds(0, 100, 360, 70);
     toSubBtn.setPreferredSize(new Dimension(300, 40)); // 大きさを変更 width,height
     toSubBtn.setMargin(new Insets(10, 40, 10, 40));

@@ -15,24 +15,30 @@ public class Main extends JFrame {
         // csvファイルを読み込む
         List<MealData> mealDataList = loadCsv("mealData.csv");
 
+        MainFrame mf = new MainFrame(); // mainFrame
+        mf.setDefaultCloseOperation(EXIT_ON_CLOSE); // xで消せるように
+        mf.setTitle("BKC学食ガチャ"); // タイトルを定義
+        mf.setSize(360, 640); // フレームの大きさを定義
+        mf.setVisible(true); // 可視化する
+
         // 適当に絞り込み要件を定義 (本当はユーザーに入力させたい)
-        String priorityPlace = "リンク"; // リンク優先
+        String priorityPlace = "ユニオン１階"; // リンク優先
         int maxValue = 500;
         int priorityColumn = 4; // カロリー優先
 
 
-        // ryuseiくんに受け渡す引数を作成
-        // 小皿リストを作成 (ryuseiくんへ受け渡す)
+        // ナップサック問題に受け渡す引数を作成
+        // 1. 小皿リストを作成
         List<MealData> kozaraList =
                 mealDataList.stream()
                         .filter(mealData -> mealData.getPlace().equals(priorityPlace))
                         .filter(mealData -> mealData.getCategory().equals("小皿"))
                         .collect(Collectors.toList());
 
-        // 米と米なしメインを結合したメイン料理のみのリストを作成
+        // 2. 米と米なしメインを結合したメイン料理のみのリストを作成
         List<MealData> mainList = makeMainDishList(mealDataList, priorityPlace, maxValue);
 
-        // 小鉢に充てるお金をもつリストを作成
+        // 3. 2を用いて小鉢に充てるお金をもつリストを作成
         List<Integer> moneyApplyInKozaraList =
                 mainList.stream()
                         .map(mealData -> maxValue - mealData.getValue())
@@ -41,18 +47,14 @@ public class Main extends JFrame {
         // ナップサック問題を応用してそれぞれのメイン料理にふさわしい小鉢のインデックスリストを記録
         List<List<Integer>> recommendList = new ArrayList<>();
         for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
-            List<Integer> tmp = new ArrayList<>();
-            tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
+            List<Integer> tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
             recommendList.add(tmp);
         }
 
-        // 正しいか確認
-        //recommendList.stream().forEach(System.out::println);
-
-        // 正しいか確認２
+        // 計算が正しいか確認 → 多分合ってる
         int i=0;
         for (List<Integer> recommend : recommendList) {
-            System.out.print("使えるお金は " + moneyApplyInKozaraList.get(i) + "円 のとき組み合わせは: ");
+            System.out.print("使えるお金が " + moneyApplyInKozaraList.get(i) + "円 のとき組み合わせは: ");
             for (Integer re : recommend) {
                 System.out.print(re + ", ");
             }
@@ -62,25 +64,20 @@ public class Main extends JFrame {
 
         // メインと小皿を結合する
 
-        // 上位２割ほどの中からランダムに一つ組み合わせを決定（"ガチャ"なのでね）
 
-        /* お試し実行 価格を昇順に並べる(正しく動く)
-        /mealDataList.stream()
-                .sorted(Comparator.comparingInt(MealData::getValue))
-                .forEach(System.out::println);
-         */
-
-        /* お試し実行 価格を降順に並べる(正しく動く)
+        /* 価格を降順に並べる(正しく動く)
         mealDataList.stream()
                 .sorted(Comparator.comparingInt(MealData::getValue).reversed())
                 .forEach(System.out::println);
          */
-        // 一度しか呼び出されないのでここで設定
-        MainFrame mf = new MainFrame(); // mainFrame
-        mf.setDefaultCloseOperation(EXIT_ON_CLOSE); // xで消せるように
-        mf.setTitle("BKC学食ガチャ"); // タイトルを定義
-        mf.setSize(360, 640); // フレームの大きさを定義
-        mf.setVisible(true); // 可視化する
+
+        // 上位２割ほどの中からランダムに一つ組み合わせを決定（"ガチャ"なのでね）
+
+
+
+        // とりあえずはターミナルに表示させる
+
+
 
     }
 
@@ -126,9 +123,6 @@ public class Main extends JFrame {
         return mealDataList;
     }
 
-    /*
-    米なしリスト + 米 = メイン に結合されたリストを出力
-     */
 
     /**
      * 米なしメイン+米=メインとするリストを出力, ついでに場所と価格も絞り込んでおく
@@ -159,11 +153,6 @@ public class Main extends JFrame {
         List<MealData> mainList =
                 filterList.stream()
                         .filter(mealData -> mealData.getCategory().equals("メイン"))
-                        .collect(Collectors.toList());
-
-        List<MealData> kozaraList =
-                filterList.stream()
-                        .filter(mealData -> mealData.getCategory().equals("小皿"))
                         .collect(Collectors.toList());
 
         // 米なしメイン+米=メイン を作成する

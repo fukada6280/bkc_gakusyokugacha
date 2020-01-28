@@ -27,7 +27,7 @@ public class SubPanel extends JPanel {
         this.setSize(360, 640);
 
         // ボタンの作成
-        toMainBtn = new JButton("MainPanelに移動=もう一度やる！！");
+        toMainBtn = new JButton("もう一度やる！！");
         toMainBtn.setBounds(150, 50, 200, 40);
         toMainBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
