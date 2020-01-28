@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 
-public class Main {
+public class Main extends JFrame {
     public static void main(String[] args) {
         // csvファイルを読み込む
         List<MealData> mealDataList = loadCsv("mealData.csv");
@@ -63,6 +65,13 @@ public class Main {
                 .sorted(Comparator.comparingInt(MealData::getValue).reversed())
                 .forEach(System.out::println);
          */
+        // 一度しか呼び出されないのでここで設定
+        MainFrame mf = new MainFrame(); // mainFrame
+        mf.setDefaultCloseOperation(EXIT_ON_CLOSE); // xで消せるように
+        mf.setTitle("BKC学食ガチャ"); // タイトルを定義
+        mf.setSize(360, 640); // フレームの大きさを定義
+        mf.setVisible(true); // 可視化する
+
     }
 
     /**
