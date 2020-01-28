@@ -15,6 +15,8 @@ public class SubPanel extends JPanel {
     String str;
 
     // JLabel resultLabel;
+    JLabel titleLabel;
+    JLabel resultLabel;
     JButton toMainBtn;
 
     // 背景色を決定する
@@ -52,6 +54,21 @@ public class SubPanel extends JPanel {
          * resultLabel.setHorizontalTextPosition(JLabel.RIGHT);
          */
 
+        System.out.println("SubPanelが実行されています");
+
+        // タイトル部分のラベルの作成
+        titleLabel = new JLabel("ガチャ結果");
+        //titleLabel.setOpaque(true);
+        titleLabel.setFont(new Font("Arial", Font.PLAIN, 30));
+        titleLabel.setBackground(backGroundColor);
+        titleLabel.setPreferredSize(new Dimension(340, 100)); // 大きさを変更 width,height
+
+        // 絞り込み結果のラベルの作成
+        resultLabel = new JLabel(String.valueOf(mf.mp.valSlider.getValue())); //valSlider.getValue()
+        resultLabel.setFont(new Font("Arial", Font.PLAIN, 30));
+        resultLabel.setBackground(backGroundColor);
+        resultLabel.setPreferredSize(new Dimension(340, 100)); // 大きさを変更 width,height
+
         // ボタンの作成
         toMainBtn = new JButton("MainPanelに移動=もう一度やる！！");
         toMainBtn.setBounds(150, 50, 200, 40);
@@ -62,6 +79,8 @@ public class SubPanel extends JPanel {
         });
 
         // this.add(resultLabel);
+        this.add(titleLabel);
+        this.add(resultLabel);
         this.add(toMainBtn);
 
     }

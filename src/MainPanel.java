@@ -32,10 +32,12 @@ public class MainPanel extends JPanel implements ChangeListener {
   public MainPanel(MainFrame m, String s) {
     mf = m;
     str = s;
-    this.setName("mp");
+    this.setName(s);
     // this.setLayout(new BorderLayout());
     // this.setLayout(null);
     this.setSize(360, 640);
+    System.out.println("MainPanelが実行されています");
+
 
     // ここからGUI関連を書く
     // 各種画像を読み込む
@@ -166,6 +168,7 @@ public class MainPanel extends JPanel implements ChangeListener {
     // getContentPane().add(this, BorderLayout.CENTER); // 中央に設置
 
   }
+
 
   // バーの変化に合わせて表示する価格を変化させる関数
   public void stateChanged(ChangeEvent e) {

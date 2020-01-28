@@ -16,7 +16,7 @@ public class Main extends JFrame {
         List<MealData> mealDataList = loadCsv("mealData.csv");
 
         // 適当に絞り込み要件を定義 (本当はユーザーに入力させたい)
-        String priorityPlace = "リンク"; // リンク優先
+        String priorityPlace = "ユニオン１階"; // リンク優先
         int maxValue = 500;
         int priorityColumn = 4; // カロリー優先
 
@@ -39,16 +39,26 @@ public class Main extends JFrame {
                         .collect(Collectors.toList());
 
         // ナップサック問題を応用してそれぞれのメイン料理にふさわしい小鉢のインデックスリストを記録
-        List<List<Integer>> RecommendList = new ArrayList<>();
+        List<List<Integer>> recommendList = new ArrayList<>();
         for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
             List<Integer> tmp = new ArrayList<>();
             tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
-            RecommendList.add(tmp);
+            recommendList.add(tmp);
         }
 
         // 正しいか確認
-        RecommendList.stream()
-                .forEach(System.out::println);
+        //recommendList.stream().forEach(System.out::println);
+
+        // 正しいか確認２
+        int i=0;
+        for (List<Integer> recommend : recommendList) {
+            System.out.print("使えるお金は " + moneyApplyInKozaraList.get(i) + "円 のとき組み合わせは: ");
+            for (Integer re : recommend) {
+                System.out.print(re + ", ");
+            }
+            System.out.println();
+            i++;
+        }
 
         // メインと小皿を結合する
 
