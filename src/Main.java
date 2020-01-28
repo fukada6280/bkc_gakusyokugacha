@@ -16,7 +16,7 @@ public class Main extends JFrame {
         List<MealData> mealDataList = loadCsv("mealData.csv");
 
         // 適当に絞り込み要件を定義 (本当はユーザーに入力させたい)
-        String priorityPlace = "ユニオン１階"; // リンク優先
+        String priorityPlace = "リンク"; // リンク優先
         int maxValue = 500;
         int priorityColumn = 4; // カロリー優先
 

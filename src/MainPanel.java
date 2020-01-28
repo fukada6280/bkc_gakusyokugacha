@@ -142,7 +142,7 @@ public class MainPanel extends JPanel implements ChangeListener {
     toSubBtn = new JButton("SubPanelに移動=この条件で検索する");
     toSubBtn.setBounds(0, 100, 360, 70);
     toSubBtn.setPreferredSize(new Dimension(300, 40)); // 大きさを変更 width,height
-    // btn.setMargin(new Insets(10, 40, 10, 40));
+    toSubBtn.setMargin(new Insets(10, 40, 10, 40));
     toSubBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
         pc(mf.PanelNames[1]);
@@ -159,12 +159,10 @@ public class MainPanel extends JPanel implements ChangeListener {
     this.add(showValLabel);
     this.add(priorityLabel);
     this.add(priorityCombo);
-    // this.add(btn);
     this.add(toSubBtn);
 
     // Container contentPane = getContentPane();
     // contentPane.add(btn, BorderLayout.PAGE_END);
-
     // getContentPane().add(this, BorderLayout.CENTER); // 中央に設置
 
   }
