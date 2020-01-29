@@ -26,59 +26,79 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
 
 
-public class Main {
+public class Main extends JFrame {
     public static void main(String[] args) {
         // csvファイルを読み込む
         List<MealData> mealDataList = loadCsv("mealData.csv");
 
+        MainFrame mf = new MainFrame(); // mainFrame
+        mf.setDefaultCloseOperation(EXIT_ON_CLOSE); // xで消せるように
+        mf.setTitle("BKC学食ガチャ"); // タイトルを定義
+        mf.setSize(360, 640); // フレームの大きさを定義
+        mf.setVisible(true); // 可視化する
+
         // 適当に絞り込み要件を定義 (本当はユーザーに入力させたい)
-        String priorityPlace = "リンク"; // リンク優先
+        String priorityPlace = "ユニオン１階"; // リンク優先
         int maxValue = 500;
         int priorityColumn = 4; // カロリー優先
 
 
-        // ryuseiくんに受け渡す引数を作成
-        // 小皿リストを作成 (ryuseiくんへ受け渡す)
+        // ナップサック問題に受け渡す引数を作成
+        // 1. 小皿リストを作成
         List<MealData> kozaraList =
                 mealDataList.stream()
                         .filter(mealData -> mealData.getPlace().equals(priorityPlace))
                         .filter(mealData -> mealData.getCategory().equals("小皿"))
                         .collect(Collectors.toList());
 
-        // 小鉢に充てるお金をもつリストを作成
+        // 2. 米と米なしメインを結合したメイン料理のみのリストを作成
+        List<MealData> mainList = makeMainDishList(mealDataList, priorityPlace, maxValue);
+
+        // 3. 2を用いて小鉢に充てるお金をもつリストを作成
         List<Integer> moneyApplyInKozaraList =
-                mealDataList.stream()
-                        .filter(mealData -> mealData.getPlace().equals(priorityPlace))
+                mainList.stream()
                         .map(mealData -> maxValue - mealData.getValue())
                         .collect(Collectors.toList());
 
-        // 米+(メインリストの組み合わせ)
-        List<List<Integer>> RecommendList = new ArrayList<>();
+        // ナップサック問題を応用してそれぞれのメイン料理にふさわしい小鉢のインデックスリストを記録
+        List<List<Integer>> recommendList = new ArrayList<>();
         for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
-            List<Integer> tmp = new ArrayList<>();
-            tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
-            RecommendList.add(tmp);
+            List<Integer> tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
+            recommendList.add(tmp);
         }
 
-        // 正しいか確認
-        RecommendList.stream()
-                .forEach(System.out::println);
+        // 計算が正しいか確認 → 多分合ってる
+        int i=0;
+        for (List<Integer> recommend : recommendList) {
+            System.out.print("使えるお金が " + moneyApplyInKozaraList.get(i) + "円 のとき組み合わせは: ");
+            for (Integer re : recommend) {
+                System.out.print(re + ", ");
+            }
+            System.out.println();
+            i++;
+        }
 
-        // 
+        // メインと小皿を結合する
 
-        /* お試し実行 価格を昇順に並べる
-        /mealDataList.stream()
-                .sorted(Comparator.comparingInt(MealData::getValue))
-                .forEach(System.out::println);
-         */
 
-        /* お試し実行 価格を降順に並べる
+        /* 価格を降順に並べる(正しく動く)
         mealDataList.stream()
                 .sorted(Comparator.comparingInt(MealData::getValue).reversed())
                 .forEach(System.out::println);
          */
+
+        // 上位２割ほどの中からランダムに一つ組み合わせを決定（"ガチャ"なのでね）
+
+
+
+        // とりあえずはターミナルに表示させる
+
+
+
     }
 
     /**
@@ -185,15 +205,14 @@ public class Main {
     }
 
 
-    /*
-     * メイン+（必要に応じて米）+(必要に応じて小皿１つ)の組み合わせで条件に合うものを出力
-     * @param mealDataList 元となるデータリスト
-     * @param priorityPlace 優先する場所
-     * @param maxValue 制限したい価格
-     * @return 条件に見合うランチセットのリスト
-
-    public static List<MealData> makeLunchSetList(List<MealData> mealDataList, String priorityPlace, int maxValue) {
-        //
+    /**
+     * 米なしメイン+米=メインとするリストを出力, ついでに場所と価格も絞り込んでおく
+     * @param mealDataList 加工したいリスト
+     * @param priorityPlace 絞り込み条件：場所
+     * @param maxValue 絞り込み条件：価格
+     * @return 区分がメインのみのリストを出力
+     */
+    public static List<MealData> makeMainDishList(List<MealData> mealDataList, String priorityPlace, int maxValue) {
         // 計算量を減らすため、先に場所限定と価格以下のフィルタをかける
         List<MealData> filterList =
                 mealDataList.stream()
@@ -201,7 +220,6 @@ public class Main {
                         .filter(mealData -> mealData.getValue() <= maxValue)
                         .collect(Collectors.toList());
 
-        // 残ったものの情報を増大させる, まずは米なしメインに米を足してメインにする
         // 米なしメインのみ抽出, 米のみ抽出, メインのみ抽出, 小皿のみ抽出
         List<MealData> noRiceMainList =
                 filterList.stream()
@@ -218,63 +236,16 @@ public class Main {
                         .filter(mealData -> mealData.getCategory().equals("メイン"))
                         .collect(Collectors.toList());
 
-        List<MealData> kozaraList =
-                filterList.stream()
-                        .filter(mealData -> mealData.getCategory().equals("小皿"))
-                        .collect(Collectors.toList());
-
         // 米なしメイン+米=メイン を作成する
         for (MealData noRiceMainData : noRiceMainList) {
             for (MealData riceData : riceList) {
-                MealData mealData = noRiceMainData.combine(riceData); // 米なしメイン + 米 = メイン を作成
+                MealData mealData = noRiceMainData.combine(riceData); // 米なしメイン+米=メイン を作成
                 mainList.add(mealData);
             }
         }
-
-
-        // ryuseiくんへ受け渡す
-        // 小鉢に充てるお金をもつリストを作成
-        List<Integer> moneyApplyInKozaraList =
-                mainList.stream()
-                        .map(mealData -> maxValue - mealData.getValue())
-                        .collect(Collectors.toList());
-
-        List<List<Integer>> RecommendList = new ArrayList<>();
-
-        for (Integer moneyApplyInKozara : moneyApplyInKozaraList) {
-            List<Integer> tmp = new ArrayList<>();
-            tmp = Knapsack.filterVal(kozaraList, moneyApplyInKozara);
-            RecommendList.add(tmp);
-        }
-
-        //
-        RecommendList.stream()
-                .forEach(System.out::println);
-
-
-        // 小皿を追加する
-        List<MealData> allPatternList = new ArrayList<>();
-        for (MealData main : mainList) {
-            for (MealData kozara : kozaraList) {
-                MealData mealData = main.combine(kozara);
-                allPatternList.add(mealData);
-            }
-        }
-
-        // 価格でフィルタ, 価格を大きい順でソート
-        List<MealData> resultList =
-                allPatternList.stream()
-                        .filter(mealData -> mealData.getValue() <= maxValue)
-                        .collect(Collectors.toList());
-
-        resultList = sortValue(resultList);
-
-        // 確認
-        //System.out.println("------------結果を出力--------------");
-        //resultList.stream().forEach(data -> data.dump());
-
-        return resultList;
+        return mainList;
     }
-    */
+
+
 }
 >>>>>>> origin/master
