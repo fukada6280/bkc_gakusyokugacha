@@ -1,6 +1,6 @@
 # BKC学食ガチャ
-BKCの学食メニューのガチャです。条件を設定すれば実用的に使えます。
-タンパク質の多い組み合わせ、カロリーの高い(低い)組み合わせ、野菜の多い組み合わせ、ミールを効率よく消費する組み合わせなどを知りたいときにもどうぞ。
+BKCの学食メニューのガチャです. 条件を設定すれば実用的に使えます. 
+タンパク質の多い組合せ, カロリーの高い(低い)組合せ, 野菜の多い組合せ, ミールを効率よく消費する組合せなどを知りたいときにもどうぞ. 
 
 ## Requirement
 - Java 13.0.1
@@ -8,7 +8,7 @@ BKCの学食メニューのガチャです。条件を設定すれば実用的�
 
 ## Usage
 ```sh
-$ git clone https://github.com/fukada6280/bkc_gakusyokugacha
+$ git clone https://github.com/fukada6280/bkc_gakusyokugacha.git
 $ cd bkc_gakusyokugacha/src/
 $ javac Main.java
 $ java Main
