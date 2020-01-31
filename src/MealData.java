@@ -1,3 +1,5 @@
+import java.math.BigDecimal;
+
 class MealData {
     // FIELD
     private String place; // 場所
@@ -62,11 +64,11 @@ class MealData {
                 "名称　　:" + getName() + "\n" +
                 "区分　　:" + getCategory() + "\n" +
                 "価格　　:" + getValue() + "\n" +
-                "ｶﾛﾘｰ　　:" + getKcal() + "\n" +
-                "ﾀﾝﾊﾟｸ質 :" + getProtein() + "\n" +
-                "脂質　　:" + getLipid() + "\n" +
-                "炭水化物:" + getCarbohydrate() + "\n" +
-                "食塩量　:" + getSalt() + "\n" +
+                "ｶﾛﾘｰ　　:" + Math.round(getKcal()) + "\n" +
+                "ﾀﾝﾊﾟｸ質 :" + Math.round(getProtein()) + "\n" +
+                "脂質　　:" + Math.round(getLipid()) + "\n" +
+                "炭水化物:" + Math.round(getCarbohydrate()) + "\n" +
+                "食塩量　:" + Math.round(getSalt()) + "\n" +
                 "ｶﾙｼｳﾑ量 :" + getCalcium() + "\n" +
                 "野菜量　:" + getVegetable();
         return str;
@@ -80,7 +82,7 @@ class MealData {
     public MealData combine(MealData md) {
         MealData mealData = new MealData(
                 this.getPlace(),
-                this.getName() + " + " + md.getName(),
+                this.getName() + " ＋ " + md.getName(),
                 "メイン",
                 this.getValue() + md.getValue(),
                 this.getKcal() + md.getKcal(),
