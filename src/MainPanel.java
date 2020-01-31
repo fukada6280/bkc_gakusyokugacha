@@ -27,7 +27,7 @@ public class MainPanel extends JPanel implements ChangeListener {
   JLabel showValLabel;
   JLabel priorityLabel;
   String[] priorityList = { "ガチャ(ランダム)", "カロリーを低く", "カロリーを高く", "タンパク質を大きく",
-                            "脂質を小さく", "カルシウムを大きく", "野菜量を大きく" };
+                            "脂質を小さく", "カルシウムを大きく", "野菜量を大きく", "予算に近く" };
   JComboBox<String> priorityCombo;
   JLabel blank;
   JButton toSubBtn;
@@ -100,7 +100,7 @@ public class MainPanel extends JPanel implements ChangeListener {
     placeCombo.setFont(new Font("Arial", Font.PLAIN, 20));
 
     // 価格帯: タイトル画像+ラベルの表示
-    valueLabel = new JLabel(" 価格帯", small_yenIcon, JLabel.LEFT);
+    valueLabel = new JLabel(" 予算", small_yenIcon, JLabel.LEFT);
     valueLabel.setOpaque(true);
     valueLabel.setFont(new Font("Arial", Font.PLAIN, 20));
     valueLabel.setBackground(backGroundColor);

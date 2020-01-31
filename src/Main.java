@@ -147,6 +147,7 @@ public class Main extends JFrame {
                                 .collect(Collectors.toList());
                 break;
             case "ガチャ(ランダム)":
+            case "予算に近く":
                 resultMealDataList =
                         mainList.stream()
                                 .sorted(Comparator.comparingInt(MealData::getValue).reversed())
