@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
-require 'fileutils'
+eequire 'fileutils'
 require 'open-uri'
 require 'husc'
-require './src/mdap'
+require 'mdap'
 
 def webDL(link, file)
   ## -----*----- Webからダウンロード -----*----- ##
