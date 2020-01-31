@@ -1,5 +1,5 @@
 # -*- coding:utf-8 -*-
-eequire 'fileutils'
+require 'fileutils'
 require 'open-uri'
 require 'husc'
 require 'mdap'
