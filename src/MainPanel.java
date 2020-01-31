@@ -9,22 +9,27 @@ import java.awt.MediaTracker;
 import java.awt.Font;
 import java.awt.Insets;
 import java.awt.Container;
+import java.util.List;
 
 public class MainPanel extends JPanel implements ChangeListener {
   MainFrame mf;
   String str;
+  List<MealData> mealDataList = Main.loadCsv("mealData.csv");
+  MealData result = mealDataList.get(0); // とりあえず何か初期値を入れておかないといけない　要変更
 
   // GUI部品
   JLabel titleLabel;
   JLabel placeLabel;
-  String[] placeList = { "指定しない", "リンク", "ユニオン１階", "ユニオン２階" };
+  String[] placeList = { "リンク", "ユニオン１階", "ユニオン２階" };
   JComboBox<String> placeCombo;
   JLabel valueLabel;
   JSlider valSlider;
   JLabel showValLabel;
   JLabel priorityLabel;
-  String[] priorityList = { "指定しない", "カロリー", "タンパク質", "野菜量" };
+  String[] priorityList = { "ガチャ(ランダム)", "カロリーを低く", "カロリーを高く", "タンパク質を大きく",
+                            "脂質を小さく", "カルシウムを大きく", "野菜量を大きく" };
   JComboBox<String> priorityCombo;
+  JLabel blank;
   JButton toSubBtn;
 
   // 背景色を決定する
@@ -34,11 +39,7 @@ public class MainPanel extends JPanel implements ChangeListener {
     mf = m;
     str = s;
     this.setName(s);
-    // this.setLayout(new BorderLayout());
-    // this.setLayout(null);
     this.setSize(360, 640);
-    System.out.println("MainPanelが実行されています");
-
 
     // ここからGUI関連を書く
     // 各種画像を読み込む
@@ -120,8 +121,6 @@ public class MainPanel extends JPanel implements ChangeListener {
     // 価格バーの実数値を表示するラベル
     showValLabel = new JLabel();
     showValLabel.setFont(new Font("Arial", Font.PLAIN, 18));
-    showValLabel.setLayout(null); // レイアウトマネージャーを無効化
-    showValLabel.setBounds(0, 0, 200, 200); // x, y, width, height
     showValLabel.setText("設定する価格： " + valSlider.getValue() + "円以内");
 
     // 栄養優先項目: タイトル画像+ラベルの表示
@@ -136,17 +135,22 @@ public class MainPanel extends JPanel implements ChangeListener {
     priorityCombo = new JComboBox<String>(priorityList);
     priorityCombo.setFont(new Font("Arial", Font.PLAIN, 20));
 
-    // placeCombo.setPreferredSize(new Dimension(80, 30)); // 大きさを指定できる
-    // startCombo.addActionListener(this);
+    // 良くない書き方だが…　文字なしJLabelで空白を作る
+    blank = new JLabel();
+    blank.setFont(new Font("Arial", Font.PLAIN, 45));
+    blank.setLayout(null); // レイアウトマネージャーを無効化
+    blank.setBounds(0, 0, 200, 200); // x, y, width, height
+    blank.setText("　　　　　　　");
 
     // 結果表示画面に移るボタンの作成
     toSubBtn = new JButton("この条件で検索する");
     toSubBtn.setBounds(0, 100, 360, 70);
-    toSubBtn.setPreferredSize(new Dimension(300, 40)); // 大きさを変更 width,height
-    toSubBtn.setMargin(new Insets(10, 40, 10, 40));
+    toSubBtn.setFont(new Font("Arial", Font.PLAIN, 20));
+    toSubBtn.setPreferredSize(new Dimension(300, 80)); // 大きさを変更 width,height
+    //toSubBtn.setMargin(new Insets(20, 20, 20, 20));
     toSubBtn.addActionListener(new ActionListener() {
       public void actionPerformed(ActionEvent e) {
-        pc(mf.PanelNames[1]);
+        panelChangeToSubPanel(mf.PanelNames[1]);
       }
     });
 
@@ -160,11 +164,8 @@ public class MainPanel extends JPanel implements ChangeListener {
     this.add(showValLabel);
     this.add(priorityLabel);
     this.add(priorityCombo);
+    this.add(blank);
     this.add(toSubBtn);
-
-    // Container contentPane = getContentPane();
-    // contentPane.add(btn, BorderLayout.PAGE_END);
-    // getContentPane().add(this, BorderLayout.CENTER); // 中央に設置
 
   }
 
@@ -174,7 +175,26 @@ public class MainPanel extends JPanel implements ChangeListener {
     showValLabel.setText("設定する価格： " + valSlider.getValue() + "円以内");
   }
 
-  public void pc(String str) {
-    mf.PanelChange((JPanel) this, str);
+  // SubPanelに遷移するためのメソッド
+  public void panelChangeToSubPanel(String toPanelName) {
+    // ここで条件から検索を行う
+    System.out.println("+----------------------------+");
+    System.out.println("設定場所: " + placeCombo.getSelectedItem());
+    System.out.println("設定価格: " + valSlider.getValue() + "円");
+    System.out.println("優先栄養: " + priorityCombo.getSelectedItem());
+    System.out.println("で検索します...");
+    System.out.println("+----------------------------+");
+
+    result = Main.gacha(mealDataList, (String)placeCombo.getSelectedItem(), valSlider.getValue(),
+            (String)priorityCombo.getSelectedItem());
+
+    // 一応ターミナルにも表示する
+    System.out.println("--- 絞り込み結果 ------------------------------");
+    System.out.println(result);
+    System.out.println("----------------------------------------------");
+
+    mf.reloadPage(mf.PanelNames[1], result); // SubPanelを初期化する
+    mf.showSubPanel((JPanel)this);
   }
+
 }

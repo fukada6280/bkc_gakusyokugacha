@@ -39,23 +39,36 @@ class MealData {
         setVegetable(vegetable);
     }
 
-    // METHOD
+    // まだ確定していない場合の初期値
+    MealData() {
+        setPlace("リンク");
+        setName("");
+        setCategory("");
+        setValue(0);
+        setKcal(0);
+        setProtein(0);
+        setLipid(0);
+        setCarbohydrate(0);
+        setSalt(0);
+        setCalcium(0);
+        setVegetable(0);
+    }
 
+    // METHOD
     @Override
     public String toString() {
         String str =
-                "場所：　　" + getPlace() + "\n" +
-                "名称：　　" + getName() + "\n" +
-                "区分：　　" + getCategory() + "\n" +
-                "価格：　　" + getValue() + "\n" +
-                "ｶﾛﾘｰ：　　" + getKcal() + "\n" +
-                "ﾀﾝﾊﾟｸ質： " + getProtein() + "\n" +
-                "脂質：　　" + getLipid() + "\n" +
-                "炭水化物：" + getCarbohydrate() + "\n" +
-                "食塩量：　" + getSalt() + "\n" +
-                "ｶﾙｼｳﾑ量： " + getCalcium() + "\n" +
-                "野菜量：　" + getVegetable() + "\n" +
-                "-----------------------------------------------";
+                "場所　　:" + getPlace() + "\n" +
+                "名称　　:" + getName() + "\n" +
+                "区分　　:" + getCategory() + "\n" +
+                "価格　　:" + getValue() + "\n" +
+                "ｶﾛﾘｰ　　:" + getKcal() + "\n" +
+                "ﾀﾝﾊﾟｸ質 :" + getProtein() + "\n" +
+                "脂質　　:" + getLipid() + "\n" +
+                "炭水化物:" + getCarbohydrate() + "\n" +
+                "食塩量　:" + getSalt() + "\n" +
+                "ｶﾙｼｳﾑ量 :" + getCalcium() + "\n" +
+                "野菜量　:" + getVegetable();
         return str;
     }
 
